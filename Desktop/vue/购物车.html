@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>商品名称</th>
+                <th>颜色</th>
+                <th>数量</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="item in goods">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td>
+                    <button @click="item.num--" :disabled="item.num<=0?true:false">-</button>
+                    <input type="text" v-model="item.num">
+                    <button @click = "item.num++">+</button>
+                </td>
+                <td>
+                    <button @click="addToCart(item)">加入购物车</button>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr v-for ="item in goodsCart">
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.num}}</td>
+                <td>{{item.num*item.price}}</td>
+            </tr>
+        </table>
+        <p>{{totalPrice}}</p>
+    </div>
+</body>
+</html>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            goods:[
+                {id:1,name:'iphonX',price:6700,num:0},
+                {id:2,name:"外星人",price:18000,num:0},
+                {id:3,name:'oppo',price:1000,num:0},
+                {id:4,name:"诺基亚",price:100,num:0},
+                {id:5,name:"三星",price:2000,num:0},
+                {id:6,name:"小米",price:1999,num:0}
+            ],
+            goodsCart:[],
+        },
+        computed:{
+            totalPrice(){
+                var total = 0;
+                this.goodsCart.forEach((item)=>{
+                    total+=item.num*item.price;
+                })
+                return total;
+            }
+        },
+        methods:{
+            addToCart(item){
+                var length = this.goodsCart.length;
+                for(var i=0;i<length;i++){
+                    var good = this.goodsCart[i];
+                    if(good.name == item.name){
+                        good.num+=item.num;
+                        return;
+                    }
+                }
+                this.goodsCart.push(item);
+            }
+        }
+    })
+</script>

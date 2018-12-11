@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./axios.js"></script>
+    <script src="./vue.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #topwach{
+            width: 100%;
+            height: 64px;
+            background: #ccc;
+            text-align: center;
+            line-height: 64px;
+            position: fixed;
+            top: 0;
+        }
+        #centerwach{
+            width: 100%;
+            height: 40px;
+            position: fixed;
+            top: 64px;
+        }
+        #centerwach input{
+            width: 100%;
+            height: 100%;
+            padding: 0 5px
+        }
+        #bottomwach{
+            margin-top: 104px;
+
+        }
+        #bottomwach li{
+            height: 25px;
+            border-bottom: 1px solid #ccc;
+            line-height: 25px; 
+            padding: 0 5px;           
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="topwach">
+            车站:<span>{{stationsName}}</span>
+        </div>
+        <div id="centerwach">
+            <input type="text" placeholder="快速查询车站" @focus ="showSearchView=true">
+        </div>
+        <div id="bottomwach">
+            <ul v-for = "item in stations">
+                <li style="background: #ccc">{{item.title}}</li>
+                <li v-for = "city in item.elements" 
+                    @click = "stationsName = city.name"
+                >{{city.name}}</li>
+            </ul>
+        </div>
+        <!-- <div id="searchView" v-show = "showSearchView" >
+            <div id="searchTop">
+                <input type="text" name="" id="" placeholder="请输入车站名" 
+                style="width: 80%;" 
+                v-model = "searValue"
+                @keyup ="searchStation">
+                <button class="cancelBTN" @click = "handleClose()">取消</button>
+            </div>
+            <div id="searchResult">
+                <ul>
+                    <li v-for="item in searchResult" @click="stationsName=item.name,handleClose()">
+                        {{item.name}}
+                    </li>
+                </ul>
+            </div>
+        </div> -->
+    </div>
+</body>
+</html>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            stationsName:"北京西",
+            stations:[],
+            // showSearchView = false,
+            searchResult: [],
+            searchValue:'',
+            searchData: [],
+            searchLength: 0,
+        },
+        // methods:{
+        //     handleClose(){
+        //         this.showSearchView = false;
+        //         this.searchResult = [];
+        //     }
+        // },
+        mounted(){
+            axios.get('http://localhost:3000/stations').then((resp)=>{
+                this.stations = resp.data
+                console.log(this.stations)
+            })
+        }
+    })
+   
+</script>
